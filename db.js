@@ -14,4 +14,9 @@ sequelize.authenticate().then(
     }
 )
 
+User = sequelize.import('./models/user');
+Jobs = sequelize.import('./models/jobs');
+
+User.hasMany(Jobs)
+
 module.exports = sequelize
