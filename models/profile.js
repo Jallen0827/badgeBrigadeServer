@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes)=>{
         skills: {
             type: DataTypes.STRING,
         },
-        role: {
-            type: DataTypes.STRING
-            // allowNull: false
-        },
         hired: {
             type: DataTypes.BOOLEAN
         }

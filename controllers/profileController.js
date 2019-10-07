@@ -41,10 +41,38 @@ router.get('/getAllstudents', (req,res)=>{
 })
 
 //CREATE PROFILE
-router
-
+router.post('/create', upload.single('file'), (req,res)=>{
+    Profiles.create({
+        picture_link: req.file.location,
+        portfolio_link: req.body.portfolio,
+        about_me: req.body.aboutMe,
+        skills: req.body.skills,
+        hired: req.body.hired,
+    })
+    .then(successData => res.status(200).json({ successData }))
+    .catch(err => {
+        res.status(500).json({ error: err })
+        console.log(err);
+    })
+})
 
 //UPDATE PROFILE
+router.put('/update/:id', upload.single('file'), (req,res)=>{
+    console.log(req.body);
+    Profiles.update({
+        picture_link: req.file.location,
+        portfolio_link: req.body.portfolio,
+        about_me: req.body.aboutMe,
+        skills: req.body.skills,
+        hired: req.body.hired,
+    }, {where: {id: req.params.id}})
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(500).send({msg: err})
+    })
+})
 
 
 //DELETE PROFILE
