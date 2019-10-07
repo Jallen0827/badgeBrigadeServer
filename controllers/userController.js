@@ -9,7 +9,8 @@ router.post('/signup', (req,res)=>{
         firstName: req.body.user.firstName,
         lastName: req.body.user.lastName,
         email: req.body.user.email,
-        password: bcrypt.hashSync(req.body.user.password, 10)
+        password: bcrypt.hashSync(req.body.user.password, 10),
+        role: req.body.user.role
     }).then((user)=>{
         let token = jwt.sign({id:user.id, role: user.role}, process.env.JWT_SECRET, {expiresIn: 60*60*24})
         res.status(200).json({
