@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes)=>{
         role: {
             type: DataTypes.STRING
             // allowNull: false
+        },
+        hired: {
+            type: DataTypes.BOOLEAN
         }
     })
     return Profile;
