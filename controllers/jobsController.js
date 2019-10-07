@@ -12,7 +12,7 @@ var validatesession = require('../middleware/validate-session');
 router.get('/alljobs', (req, res) => {
     Jobs.findAll()
     .then(job => res.status(200).json(job))
-    .create(err => res.status(500).json({ error: err }))
+    .catch(err => res.status(500).json({ error: err }))
 })
 
 // Get Single Job
@@ -54,7 +54,7 @@ router.post('/create', (req, res) => {
 
 router.put('/:id', (req, res) => {
     Jobs.update(req.body.job,{
-        where:{id: req.params.id, owner: req.job.id}
+        where:{id: req.params.id}
     })
     .then(job => res.status(200).json(job))
     .catch(err => res.json({error:err}));
@@ -70,7 +70,7 @@ router.delete('/delete/:id', function(req,res) {
 
     Jobs
         .destroy({
-            where: { id: data, owner: userid }
+            where: { id: data }
         }).then(
             function deleteJobSuccess(data) {
                 res.send("Job Removed")
