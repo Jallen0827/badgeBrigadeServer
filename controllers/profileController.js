@@ -7,6 +7,13 @@ const AWS = require('aws-sdk')
 //MODELS/MIDDLEWARE
 const Profiles = require('../db').import('../models/profile.js')
 
+//SETUP S3
+let s3 = new AWS.S3({
+    accessKeyId:  process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    region: process.env.REGION
+})
+
 //SETUP MULTER STORAGE LOCATION
 let upload = multer({
     storage: multerS3({

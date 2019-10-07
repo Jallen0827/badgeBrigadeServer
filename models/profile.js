@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes)=>{
-    const Profile = sequelize.define('user', {
+    const Profile = sequelize.define('profile', {
         picture_link: {
             type: DataTypes.STRING,
         },
