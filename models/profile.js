@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes)=>{
         skills: {
             type: DataTypes.STRING,
         },
+        role: {
+            type: DataTypes.STRING
+            // allowNull: false
+        }
     })
     return Profile;
 }

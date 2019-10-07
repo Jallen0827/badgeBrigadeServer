@@ -47,5 +47,6 @@ router.post('/signin', (req,res)=>{
     }, err => res.status(501).send({error: 'Failed to process'}))
 })
 
+//GET ALL STUDENTS
 
 module.exports = router;

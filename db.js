@@ -6,7 +6,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL,
 
 sequelize.authenticate().then(
     function (){
-        console.log('Connected to blueBadge postgress database')
+        console.log('Connected to redBadge postgress database')
     },
     function(err){
         console.log(err)
