@@ -3,6 +3,7 @@ let sequelize = require('../db')
 let user = sequelize.import('../models/user')
 
 module.exports = function(req,res,next){
+    // console.log(req.params.id);
     if(req.method =='OPTIONS'){
         next()
     }else{
@@ -11,16 +12,27 @@ module.exports = function(req,res,next){
         else{
             jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded)=>{
                 if(decoded){
+                    // console.log(decoded)
                     user.findByPk(decoded.id) //tried findByPk instead of findOne
                     .then(user =>{
+                        // console.log(req.params.id)
+                        // console.log(`Inside the auth function.`)
+                        if (user.role === 'Admin' || req.params.id === decoded.id){
                         req.user = user
+                        // console.log(`inside the if statement.`)
+                        // console.log(user.role)
+                        // console.log(user.id)
+                        // console.log(decoded.id)
                         next()
+                        }else{
+                            res.status(400).send( { error:'Not authorized.' } ) 
+                        }
                     },
                     ()=>{ //Changed this to arrow function
                         res.status(401).send({error: 'Not authorized'})
                     })
                 }else{
-                    res.status(400).send({error:'Not authorized'})
+                    res.status(402).send({error:'Not authorized'})
                 }
             })
         }

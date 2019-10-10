@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validateSession = require('../middleware/validate-session');
 
 //SIGNUP
 router.post('/signup', (req,res)=>{
@@ -47,6 +48,33 @@ router.post('/signin', (req,res)=>{
     }, err => res.status(501).send({error: 'Failed to process'}))
 })
 
-//GET ALL STUDENTS
+// UPDATE USER
+router.put('/update/:id', validateSession, (req,res)=>{
+    User.update({
+        firstName: req.body.user.firstName,
+        lastName: req.body.user.lastName,
+        email: req.body.user.email,
+        password: bcrypt.hashSync(req.body.user.password, 10),
+        role: req.body.user.role
+    }, {where: {id: req.params.id}})
+    .then(data =>{
+        res.status(200).json(`${req.body.user.firstName} successfully updated.`)
+    })
+    .catch(err=>{
+        res.status(500).send({msg: err})
+    })
+})
+
+// DELETE USER
+router.delete('/delete/:id', validateSession, (req,res)=>{
+    User.destroy({where: {id: req.params.id}})
+    .then(data=>{
+        res.status(200).json(`${req.params.id} successfully updated.`)
+    })
+    .catch(err=>{
+        res.status(500).json({msg: err})
+    })
+})
+
 
 module.exports = router;
