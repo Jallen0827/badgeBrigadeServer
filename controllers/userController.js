@@ -76,5 +76,21 @@ router.delete('/delete/:id', validateSession, (req,res)=>{
     })
 })
 
+// Get User and Profile
+router.get('/getprofile', validateSession, (req, res) => {
+    console.log(req.user.id)
+    User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: 'profile'
+    })
+        .then(function creatSuccess(data) {
+            res.status(200).json({
+                data: data
+            })
+        }).catch(err => res.status(500).json(err))
+})
+
 
 module.exports = router;

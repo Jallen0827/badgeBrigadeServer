@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(require('./middleware/headers'))
 app.use('/user', User)
 
-app.use(require('./middleware/validate-session'))
+// app.use(require('./middleware/validate-session'))
 app.use('/jobs', Jobs)
 app.use('/profile', Profile)
 
