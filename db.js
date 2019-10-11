@@ -14,9 +14,19 @@ sequelize.authenticate().then(
     }
 )
 
-User = sequelize.import('./models/user');
-Jobs = sequelize.import('./models/jobs');
+const db = {};
 
-User.hasMany(Jobs)
+db.Sequelize = Sequelize; 
+db.sequelize = sequelize;
 
-module.exports = sequelize
+db.User = require('./models/user')(sequelize, Sequelize);
+db.Jobs = require('./models/jobs')(sequelize, Sequelize);
+db.Profile = require('./models/profile')(sequelize, Sequelize);
+
+db.User.hasOne(db.Profile);
+db.Profile.belongsTo(db.User, {foreignKey: 'userID'});
+
+db.User.hasMany(db.Jobs);
+db.Jobs.belongsTo(db.User, {foreignKey: 'userID'});
+
+module.exports = sequelize;

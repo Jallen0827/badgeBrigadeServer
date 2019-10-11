@@ -1,7 +1,7 @@
 const router = require('express').Router()
 var sequelize = require('../db');
 var Jobs = sequelize.import('../models/jobs');
-var validatesession = require('../middleware/validate-session');
+var validateSession = require('../middleware/validate-session');
 
 /****************
  *** Get Jobs ***
@@ -30,13 +30,15 @@ router.get('/job/:id', (req, res) => {
 *****************/
 
 router.post('/create', (req, res) => {
+    console.log(req.user.id)
     Jobs.create({
         job_title: req.body.job.job_title,
         company_name: req.body.job.company_name,
         company_info: req.body.job.company_info,
         position_summary: req.body.job.position_summary,
         desired_skills: req.body.job.desired_skills,
-        how_to_apply: req.body.job.how_to_apply
+        how_to_apply: req.body.job.how_to_apply,
+        userId: req.user.id
     })
     .then(
         createSuccess = job => {

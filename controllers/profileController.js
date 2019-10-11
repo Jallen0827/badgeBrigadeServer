@@ -5,7 +5,8 @@ const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
 //MODELS/MIDDLEWARE
-const Profiles = require('../db').import('../models/profile.js')
+const Profile = require('../db').import('../models/profile.js')
+const validateSession = require('../middleware/validate-session');
 
 //SETUP S3
 let s3 = new AWS.S3({
@@ -31,7 +32,7 @@ let upload = multer({
 
 //GETALLSTUDENTS
 router.get('/getAllstudents', (req,res)=>{
-    Profiles.findall({where:{role: 'student'}})
+    Profile.findall({where:{role: 'student'}})
     .then(data =>{
         res.status(200).json(data)
     })
@@ -41,13 +42,17 @@ router.get('/getAllstudents', (req,res)=>{
 })
 
 //CREATE PROFILE
-router.post('/create', upload.single('file'), (req,res)=>{
-    Profiles.create({
+router.post('/create', validateSession, upload.single('file'), (req,res)=>{
+    console.log(req.user.id)
+    // console.log(req.body)
+    // console.log(req.file)
+    Profile.create({
         picture_link: req.file.location,
         portfolio_link: req.body.portfolio,
         about_me: req.body.aboutMe,
         skills: req.body.skills,
         hired: req.body.hired,
+        userId: req.user.id
     })
     .then(successData => res.status(200).json({ successData }))
     .catch(err => {
@@ -57,9 +62,8 @@ router.post('/create', upload.single('file'), (req,res)=>{
 })
 
 //UPDATE PROFILE
-router.put('/update/:id', upload.single('file'), (req,res)=>{
-    console.log(req.body);
-    Profiles.update({
+router.put('/update/:id', validateSession, upload.single('file'), (req,res)=>{
+    Profile.update({
         picture_link: req.file.location,
         portfolio_link: req.body.portfolio,
         about_me: req.body.aboutMe,
@@ -77,7 +81,7 @@ router.put('/update/:id', upload.single('file'), (req,res)=>{
 
 //DELETE PROFILE
 router.delete('/delete/:id', (req,res)=>{
-    Profiles.destroy({where: {id: req.params.id}})
+    Profile.destroy({where: {id: req.params.id}})
     .then(data=>{
         res.status(200).json(data)
     })
