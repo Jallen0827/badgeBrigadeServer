@@ -7,7 +7,7 @@ let User = require('./controllers/userController')
 let Profile = require('./controllers/profileController')
 let sequelize= require('./db')
 
-sequelize.sync({force: true})
+sequelize.sync()
 app.use(express.json())
 
 app.use(require('./middleware/headers'))

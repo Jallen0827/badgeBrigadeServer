@@ -10,7 +10,7 @@ const User = require('../db').import('../models/user.js');
 const validateSession = require('../middleware/validate-session');
 
 //DB ASSOCIATIONS
-User.belongsTo(Profile);
+// User.belongsTo(Profile);
 
 //SETUP S3
 let s3 = new AWS.S3({
@@ -34,52 +34,7 @@ let upload = multer({
     })
 })
 
-//GETALLSTUDENTS
-router.get('/getAllstudents', (req,res)=>{
-    Profile.findall({where:{role: 'student'}})
-    .then(data =>{
-        res.status(200).json(data)
-    })
-    .catch(err=>{
-        res.status(401).send({msg: err})
-    })
-})
 
-//GET USER PROFILE
-router.get('/', validateSession, (req,res)=>{
-    Profile.findOne({
-        where: { 
-            userId: req.user.id
-        },
-        include: 'user'
-    })
-    .then(data=>{
-        res.status(200).json(data)
-    })
-    .catch(err=>{
-        res.status(401).send({msg: err})
-    })
-})
-
-//CREATE PROFILE
-router.post('/create', validateSession, upload.single('file'), (req,res)=>{
-    console.log(req.user.id)
-    // console.log(req.body)
-    // console.log(req.file)
-    Profile.create({
-        picture_link: req.file.location,
-        portfolio_link: req.body.portfolio,
-        about_me: req.body.aboutMe,
-        skills: req.body.skills,
-        hired: req.body.hired,
-        userId: req.user.id
-    })
-    .then(successData => res.status(200).json({ successData }))
-    .catch(err => {
-        res.status(500).json({ error: err })
-        console.log(err);
-    })
-})
 
 //UPDATE PROFILE
 router.put('/update/:id', validateSession, upload.single('file'), (req,res)=>{
