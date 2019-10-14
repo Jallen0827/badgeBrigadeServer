@@ -80,14 +80,14 @@ router.post('/signin', (req,res)=>{
 // UPDATE USER
 router.put('/update/:id', validateSession, upload.single('file'), (req,res)=>{
     User.update({
-        firstName: req.body.user.firstName,
-        lastName: req.body.user.lastName,
-        email: req.body.user.email,
-        password: bcrypt.hashSync(req.body.user.password, 10),
-        role: req.body.user.role,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 10),
+        role: req.body.role,
         picture_link: req.file.location,
         portfolio_link: req.body.portfolio,
-        about_me: req.body.aboutMe,
+        about_me: req.body.about_me,
         skills: req.body.skills,
         hired: req.body.hired
     }, {where: {id: req.params.id}})
