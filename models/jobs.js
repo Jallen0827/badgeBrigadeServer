@@ -1,22 +1,22 @@
 module.exports = (sequelize, DataTypes)=>{
     const Jobs = sequelize.define('job', {
         job_title: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT
         },
         company_name: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT
         },
         company_info:{
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT
         },
         position_summary: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT
         },
         desired_skills: {
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         how_to_apply: {
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         }
     })
     return Jobs;

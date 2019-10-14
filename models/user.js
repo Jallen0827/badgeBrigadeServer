@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes)=>{
             type: DataTypes.STRING,
         },
         about_me:{
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
         },
         skills: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
         },
         hired: {
             type: DataTypes.BOOLEAN
