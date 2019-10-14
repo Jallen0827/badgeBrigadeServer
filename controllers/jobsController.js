@@ -9,6 +9,8 @@ const validateSession = require('../middleware/validate-session');
 
 //DB ASSOCIATIONS
 User.hasMany(Jobs);
+
+
 /****************
  *** Get Jobs ***
 ****************/

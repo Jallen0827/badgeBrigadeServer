@@ -58,6 +58,7 @@ router.post('/signin', (req,res)=>{
             email: req.body.user.email
         }
     }).then((user)=>{
+        console.log('akdfja;dfj;adj', user)
         if(user){
             bcrypt.compare(req.body.user.password, user.password, (err,matches)=>{
                 if(matches){
@@ -73,7 +74,7 @@ router.post('/signin', (req,res)=>{
         }else{
             res.status(500).send({error: 'Failed to authenticate'})
         }
-    }, err => res.status(501).send({error: 'Failed to process'}))
+    }, err => res.status(501).send({error: 'Failed to process', msg: err}))
 })
 
 // UPDATE USER
@@ -109,20 +110,36 @@ router.delete('/delete/:id', validateSession, (req,res)=>{
     })
 })
 
-// Get User and Profile
+// GET USER PROFILE INFO
 router.get('/getprofile', validateSession, (req, res) => {
     console.log(req.user.id)
-    User.findOne({
-        where: {
-            id: req.user.id
-        },
-        include: 'profile'
-    })
+    User.findOne({where: {id: req.user.id}})
         .then(function creatSuccess(data) {
-            res.status(200).json({
-                data: data
-            })
-        }).catch(err => res.status(500).json(err))
+            res.status(200).json({data: data})
+        })
+        .catch(err => res.status(500).json(err))
+})
+
+//GET ALL STUDENTS
+router.get('/getAllStudents', validateSession, (req,res)=>{
+    User.findall({where:{role: 'student'}})
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+    })
+})
+
+//GET ALL
+router.get('/getAll', validateSession, (req, res)=>{
+    User.findAll()
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+    })
 })
 
 
