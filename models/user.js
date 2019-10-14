@@ -20,6 +20,21 @@ module.exports = (sequelize, DataTypes)=>{
         role: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        picture_link: {
+            type: DataTypes.STRING,
+        },
+        portfolio_link: {
+            type: DataTypes.STRING,
+        },
+        about_me:{
+            type: DataTypes.STRING,
+        },
+        skills: {
+            type: DataTypes.STRING,
+        },
+        hired: {
+            type: DataTypes.BOOLEAN
         }
     })
     return User;

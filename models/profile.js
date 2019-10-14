@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes)=>{
         },
         hired: {
             type: DataTypes.BOOLEAN
-        }
+        },
+        // userId: {
+        //     type: DataTypes.INTEGER
+        // }
     })
     return Profile;
 }
