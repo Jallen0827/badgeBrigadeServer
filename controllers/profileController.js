@@ -5,8 +5,12 @@ const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
 //MODELS/MIDDLEWARE
-const Profile = require('../db').import('../models/profile.js')
+const Profile = require('../db').import('../models/profile.js');
+const User = require('../db').import('../models/user.js');
 const validateSession = require('../middleware/validate-session');
+
+//DB ASSOCIATIONS
+User.belongsTo(Profile);
 
 //SETUP S3
 let s3 = new AWS.S3({
@@ -34,6 +38,22 @@ let upload = multer({
 router.get('/getAllstudents', (req,res)=>{
     Profile.findall({where:{role: 'student'}})
     .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+    })
+})
+
+//GET USER PROFILE
+router.get('/', validateSession, (req,res)=>{
+    Profile.findOne({
+        where: { 
+            userId: req.user.id
+        },
+        include: 'user'
+    })
+    .then(data=>{
         res.status(200).json(data)
     })
     .catch(err=>{

@@ -1,8 +1,14 @@
+//REQUIRED PACKAGES
 const router = require('express').Router()
 var sequelize = require('../db');
-var Jobs = sequelize.import('../models/jobs');
-var validateSession = require('../middleware/validate-session');
 
+//MODELS AND MIDDLEWARE
+const User = require('../db').import('../models/user.js');
+const Jobs = require('../db').import('../models/jobs.js');
+const validateSession = require('../middleware/validate-session');
+
+//DB ASSOCIATIONS
+User.hasMany(Jobs);
 /****************
  *** Get Jobs ***
 ****************/
