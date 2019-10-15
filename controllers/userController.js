@@ -111,9 +111,9 @@ router.delete('/delete/:id', validateSession, (req,res)=>{
 })
 
 // GET USER PROFILE INFO
-router.get('/getprofile', validateSession, (req, res) => {
-    console.log(req.user.id)
-    User.findOne({where: {id: req.user.id}})
+router.get('/getprofile', (req, res) => {
+    let token = jwt.decode(req.headers.authorization);
+    User.findOne({where: {id: token.id}})
         .then(function creatSuccess(data) {
             res.status(200).json({data: data})
         })
