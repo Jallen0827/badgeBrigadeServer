@@ -10,18 +10,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.4"
   },
   "dependencies": {
-    "aws-sdk": "^2.547.0",
+    "aws-sdk": "^2.551.0",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^5.19.6"
+    "sequelize": "^5.19.7"
   }
 }

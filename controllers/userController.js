@@ -53,11 +53,13 @@ router.post('/signup', (req,res)=>{
 
 //SIGNIN
 router.post('/signin', (req,res)=>{
+    // console.log(req.body)
     User.findOne({
         where:{
             email: req.body.user.email
         }
     }).then((user)=>{
+        // console.log('akdfja;dfj;adj', user)
         if(user){
             bcrypt.compare(req.body.user.password, user.password, (err,matches)=>{
                 if(matches){
@@ -122,12 +124,27 @@ router.get('/getprofile', (req, res) => {
 
 //GET ALL STUDENTS
 router.get('/getAllStudents', validateSession, (req,res)=>{
-    User.findall({where:{role: 'student'}})
+    console.log('inside the get function!!!!!!!!!!!!!!!!!')
+    User.findAll({where:{role: 'student'}})
     .then(data =>{
         res.status(200).json(data)
     })
     .catch(err=>{
         res.status(401).send({msg: err})
+        console.log('failed to getAll');
+    })
+})
+
+//GET ALL EMPLOYERS
+router.get('/getAllEmployer', validateSession, (req,res)=>{
+    console.log('inside the get function!!!!!!!!!!!!!!!!!')
+    User.findAll({where:{role: 'employer'}})
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+        console.log('failed to getAll');
     })
 })
 
