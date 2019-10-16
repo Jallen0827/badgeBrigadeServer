@@ -79,21 +79,22 @@ router.post('/signin', (req,res)=>{
 })
 
 // UPDATE USER
-router.put('/update/:id', validateSession, upload.single('file'), (req,res)=>{
+router.put('/update', upload.single('file'), (req,res)=>{
+    let token = jwt.decode(req.headers.authorization);
     User.update({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10),
         role: req.body.role,
-        picture_link: req.file.location,
-        portfolio_link: req.body.portfolio,
+        portfolio_link: req.body.portfolio_link,
         about_me: req.body.about_me,
         skills: req.body.skills,
-        hired: req.body.hired
-    }, {where: {id: req.params.id}})
+        hired: req.body.hired,
+        picture_link: req.file.location
+    }
+    , {where: {id: token.id}})
     .then(data =>{
-        res.status(200).json(`${req.body.user.firstName} successfully updated.`)
+        res.status(200).json(`successfully updated.`)
     })
     .catch(err=>{
         res.status(500).send({msg: err})
@@ -125,6 +126,19 @@ router.get('/getprofile', (req, res) => {
 router.get('/getAllStudents', validateSession, (req,res)=>{
     console.log('inside the get function!!!!!!!!!!!!!!!!!')
     User.findAll({where:{role: 'student'}})
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+        console.log('failed to getAll');
+    })
+})
+
+//GET ALL EMPLOYERS
+router.get('/getAllEmployer', validateSession, (req,res)=>{
+    console.log('inside the get function!!!!!!!!!!!!!!!!!')
+    User.findAll({where:{role: 'employer'}})
     .then(data =>{
         res.status(200).json(data)
     })
