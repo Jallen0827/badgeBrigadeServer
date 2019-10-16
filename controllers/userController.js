@@ -58,7 +58,6 @@ router.post('/signin', (req,res)=>{
             email: req.body.user.email
         }
     }).then((user)=>{
-        console.log('akdfja;dfj;adj', user)
         if(user){
             bcrypt.compare(req.body.user.password, user.password, (err,matches)=>{
                 if(matches){
@@ -78,21 +77,22 @@ router.post('/signin', (req,res)=>{
 })
 
 // UPDATE USER
-router.put('/update/:id', validateSession, upload.single('file'), (req,res)=>{
+router.put('/update', upload.single('file'), (req,res)=>{
+    let token = jwt.decode(req.headers.authorization);
     User.update({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10),
         role: req.body.role,
-        picture_link: req.file.location,
-        portfolio_link: req.body.portfolio,
+        portfolio_link: req.body.portfolio_link,
         about_me: req.body.about_me,
         skills: req.body.skills,
-        hired: req.body.hired
-    }, {where: {id: req.params.id}})
+        hired: req.body.hired,
+        picture_link: req.file.location
+    }
+    , {where: {id: token.id}})
     .then(data =>{
-        res.status(200).json(`${req.body.user.firstName} successfully updated.`)
+        res.status(200).json(`successfully updated.`)
     })
     .catch(err=>{
         res.status(500).send({msg: err})
