@@ -6,17 +6,17 @@ module.exports = (sequelize, DataTypes)=>{
         company_name: {
             type: DataTypes.TEXT
         },
-        company_info:{
-            type: DataTypes.TEXT
-        },
         position_summary: {
             type: DataTypes.TEXT
         },
-        desired_skills: {
-            type: DataTypes.TEXT
+        contact_email: {
+            type: DataTypes.STRING
         },
-        how_to_apply: {
-            type: DataTypes.TEXT
+        where_to_apply: {
+            type: DataTypes.STRING
+        },
+        company_logo: {
+            type: DataTypes.STRING
         }
     })
     return Jobs;
