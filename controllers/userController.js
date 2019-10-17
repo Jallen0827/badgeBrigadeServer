@@ -88,7 +88,7 @@ router.put('/update', upload.single('file'), (req,res)=>{
         about_me: req.body.about_me,
         skills: req.body.skills,
         hired: req.body.hired,
-        picture_link: req.file.location
+        picture_link: (req.file) ? req.file.location : req.body.picture_link
     }
     , {where: {id: token.id}})
     .then(data =>{
