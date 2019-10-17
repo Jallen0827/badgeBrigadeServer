@@ -160,7 +160,7 @@ router.get('/getAll', validateSession, (req, res)=>{
 })
 
 //GET USER BY ID
-router.get('/getUser/:id', validateSession, (req, res)=>{
+router.get('/getUser/:id', (req, res)=>{
     User.findOne({where: {id: req.params.id}})
     .then(data =>{
         res.status(200).json(data)
