@@ -4,6 +4,7 @@ var sequelize = require('../db');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
+const jwt = require('jsonwebtoken');
 
 //MODELS AND MIDDLEWARE
 const User = require('../db').import('../models/user.js');
@@ -44,6 +45,18 @@ let upload = multer({
 
 router.get('/alljobs', (req, res) => {
     Jobs.findAll()
+    .then(job => res.status(200).json(job))
+    .catch(err => res.status(500).json({ error: err }))
+})
+
+// Get Job by User Id
+
+router.get('/alluserjobs/user', (req, res) => {
+    let token = jwt.decode(req.headers.authorization);
+    console.log(token)
+    Jobs.findAll({
+        where: {userId: token.id}
+    })
     .then(job => res.status(200).json(job))
     .catch(err => res.status(500).json({ error: err }))
 })
