@@ -70,7 +70,7 @@ router.post('/create', validateSession, upload.single('file'), (req, res) => {
         position_summary: req.body.position_summary,
         contact_email: req.body.contact_email,
         where_to_apply: req.body.where_to_apply,
-        company_logo: req.file.location,
+        company_logo: (req.file) ? req.file.location : null,
         userId: req.user.id
     })
     .then(
