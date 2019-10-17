@@ -53,13 +53,11 @@ router.post('/signup', (req,res)=>{
 
 //SIGNIN
 router.post('/signin', (req,res)=>{
-    // console.log(req.body)
     User.findOne({
         where:{
             email: req.body.user.email
         }
     }).then((user)=>{
-        // console.log('akdfja;dfj;adj', user)
         if(user){
             bcrypt.compare(req.body.user.password, user.password, (err,matches)=>{
                 if(matches){
@@ -102,19 +100,30 @@ router.put('/update', upload.single('file'), (req,res)=>{
 })
 
 // DELETE USER
-router.delete('/delete/:id', validateSession, (req,res)=>{
-    User.destroy({where: {id: req.params.id}})
-    .then(data=>{
-        res.status(200).json(`${req.params.id} successfully updated.`)
-    })
-    .catch(err=>{
-        res.status(500).json({msg: err})
-    })
+router.delete('/delete', (req,res)=>{
+    let token = jwt.decode(req.headers.authorization);
+
+    if (token.role === 'Admin'){
+        User.destroy({where: {id: req.body.userId}})
+        .then(data=>{
+            res.status(200).json(`${req.params.id} successfully updated.`)
+        })
+        .catch(err=>{
+            res.status(500).json({msg: err})
+        })
+    } else {
+        User.destroy({where: {id: token.id}})
+        .then(data=>{
+            res.status(200).json(`${req.params.id} successfully updated.`)
+        })
+        .catch(err=>{
+            res.status(500).json({msg: err})
+        })
+    }
 })
 
 // GET USER PROFILE INFO
 router.get('/getprofile', (req, res) => {
-    let token = jwt.decode(req.headers.authorization);
     User.findOne({where: {id: token.id}})
         .then(function creatSuccess(data) {
             res.status(200).json({data: data})
@@ -124,27 +133,12 @@ router.get('/getprofile', (req, res) => {
 
 //GET ALL STUDENTS
 router.get('/getAllStudents', validateSession, (req,res)=>{
-    console.log('inside the get function!!!!!!!!!!!!!!!!!')
-    User.findAll({where:{role: 'student'}})
+    User.findall({where:{role: 'student'}})
     .then(data =>{
         res.status(200).json(data)
     })
     .catch(err=>{
         res.status(401).send({msg: err})
-        console.log('failed to getAll');
-    })
-})
-
-//GET ALL EMPLOYERS
-router.get('/getAllEmployer', validateSession, (req,res)=>{
-    console.log('inside the get function!!!!!!!!!!!!!!!!!')
-    User.findAll({where:{role: 'employer'}})
-    .then(data =>{
-        res.status(200).json(data)
-    })
-    .catch(err=>{
-        res.status(401).send({msg: err})
-        console.log('failed to getAll');
     })
 })
 
@@ -158,17 +152,5 @@ router.get('/getAll', validateSession, (req, res)=>{
         res.status(401).send({msg: err})
     })
 })
-
-//GET USER BY ID
-router.get('/getUser/:id', (req, res)=>{
-    User.findOne({where: {id: req.params.id}})
-    .then(data =>{
-        res.status(200).json(data)
-    })
-    .catch(err=>{
-        res.status(401).send({msg: err})
-    })
-})
-
 
 module.exports = router;
