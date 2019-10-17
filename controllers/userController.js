@@ -153,5 +153,4 @@ router.get('/getAll', validateSession, (req, res)=>{
     })
 })
 
-
 module.exports = router;
