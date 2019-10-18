@@ -101,16 +101,16 @@ router.post('/create', validateSession, upload.single('file'), (req, res) => {
 *******************/
 
 router.put('/:id', validateSession, upload.single('file'), (req, res) => {
-    console.log(req.file)
+    console.log(req.file, req.body,req.params.id)
     Jobs.update({
         job_title: req.body.job_title,
         company_name: req.body.company_name,
         position_summary: req.body.position_summary,
         contact_email: req.body.contact_email,
         where_to_apply: req.body.where_to_apply,
-        company_logo: req.file.location,
+        company_logo: (req.file) ? req.file.location : req.body.company_logo,
         userId: req.user.id },
-        { where:{id: req.params.id}})
+        { where:{id: req.body.jobId}})
     .then(job => res.status(200).json(job))
     .catch(err => res.json({error:err}));
 })
@@ -119,16 +119,15 @@ router.put('/:id', validateSession, upload.single('file'), (req, res) => {
  *** Delete Jobs ***
 *******************/
 
-router.delete('/delete/:id', function(req,res) {
+router.delete('/delete/:id', validateSession, function(req,res) {
     var data = req.params.id;
-    var userid = req.user.id;
 
     Jobs
         .destroy({
             where: { id: data }
         }).then(
             function deleteJobSuccess(data) {
-                res.send("Job Removed")
+                res.send(data)
             },
             function deleteJobFailure(err) {
                 res.send(500, err.message);
