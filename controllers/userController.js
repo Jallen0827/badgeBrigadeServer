@@ -164,6 +164,17 @@ router.get('/getAllStudents', validateSession, (req,res)=>{
     })
 })
 
+//GET ALL EMPLOYERS
+router.get('/getAllEmployer', validateSession, (req,res)=>{
+    User.findAll({where:{role: 'employer'}})
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+    })
+})
+
 //GET ALL
 router.get('/getAll', validateSession, (req, res)=>{
     User.findAll()
