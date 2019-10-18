@@ -79,24 +79,45 @@ router.post('/signin', (req,res)=>{
 // UPDATE USER
 router.put('/update', upload.single('file'), (req,res)=>{
     let token = jwt.decode(req.headers.authorization);
-    User.update({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        role: req.body.role,
-        portfolio_link: req.body.portfolio_link,
-        about_me: req.body.about_me,
-        skills: req.body.skills,
-        hired: req.body.hired,
-        picture_link: (req.file) ? req.file.location : req.body.picture_link
-    }
-    , {where: {id: token.id}})
-    .then(data =>{
-        res.status(200).json(`successfully updated.`)
-    })
-    .catch(err=>{
-        res.status(500).send({msg: err})
-    })
+    
+    if (token.role === 'Admin'){
+        User.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            role: req.body.role,
+            portfolio_link: req.body.portfolio_link,
+            about_me: req.body.about_me,
+            skills: req.body.skills,
+            hired: req.body.hired,
+            picture_link: (req.file) ? req.file.location : req.body.picture_link
+        }
+        , {where: {id: token.id}})
+        .then(data =>{
+            res.status(200).json(`successfully updated.`)
+        })
+        .catch(err=>{
+            res.status(500).send({msg: err})
+        })
+    } else {
+        User.update({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            role: req.body.role,
+            portfolio_link: req.body.portfolio_link,
+            about_me: req.body.about_me,
+            skills: req.body.skills,
+            hired: req.body.hired,
+            picture_link: (req.file) ? req.file.location : req.body.picture_link
+        }
+        , {where: {id: token.id}})
+        .then(data =>{
+            res.status(200).json(`successfully updated.`)
+        })
+        .catch(err=>{
+            res.status(500).send({msg: err})})
+    };
 })
 
 // DELETE USER
@@ -134,7 +155,7 @@ router.get('/getprofile', (req, res) => {
 
 //GET ALL STUDENTS
 router.get('/getAllStudents', validateSession, (req,res)=>{
-    User.findall({where:{role: 'student'}})
+    User.findAll({where:{role: 'student'}})
     .then(data =>{
         res.status(200).json(data)
     })
@@ -146,6 +167,17 @@ router.get('/getAllStudents', validateSession, (req,res)=>{
 //GET ALL
 router.get('/getAll', validateSession, (req, res)=>{
     User.findAll()
+    .then(data =>{
+        res.status(200).json(data)
+    })
+    .catch(err=>{
+        res.status(401).send({msg: err})
+    })
+})
+
+//GET USER BY ID
+router.get('/getUser/:id', validateSession, (req, res)=>{
+    User.findOne({where: {id: req.params.id}})
     .then(data =>{
         res.status(200).json(data)
     })
