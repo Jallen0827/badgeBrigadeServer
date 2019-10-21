@@ -122,10 +122,11 @@ router.put('/update', upload.single('file'), (req,res)=>{
 
 // DELETE USER
 router.delete('/delete', (req,res)=>{
+    // console.log(req.query.userId);
     let token = jwt.decode(req.headers.authorization);
 
     if (token.role === 'Admin'){
-        User.destroy({where: {id: req.body.userId}})
+        User.destroy({where: {id: req.query.userId}})
         .then(data=>{
             res.status(200).json(`${req.params.id} successfully updated.`)
         })
