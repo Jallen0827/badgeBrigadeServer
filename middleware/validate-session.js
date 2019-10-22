@@ -3,7 +3,7 @@ let sequelize = require('../db')
 let user = sequelize.import('../models/user')
 
 module.exports = function(req,res,next){
-    console.log(req.params.id);
+    console.log(req.query.userId);
     console.log(req.headers)
     if(req.method =='OPTIONS'){
         next()
@@ -18,7 +18,7 @@ module.exports = function(req,res,next){
                     .then(user =>{
                         // console.log(req.params.id)
                         // console.log(`Inside the auth function.`)
-                        if (user.role === 'Admin' || req.params.id == decoded.id){
+                        if (user.role === 'Admin' || req.query.userId == decoded.id){
                         req.user = user
                         // console.log(`inside the if statement.`)
                         // console.log(user.role)

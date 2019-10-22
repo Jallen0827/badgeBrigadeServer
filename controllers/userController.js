@@ -78,6 +78,7 @@ router.post('/signin', (req,res)=>{
 
 // UPDATE USER
 router.put('/update', upload.single('file'), (req,res)=>{
+    console.log(req.body, req.file);
     let token = jwt.decode(req.headers.authorization);
     
     if (token.role === 'Admin'){
@@ -92,12 +93,12 @@ router.put('/update', upload.single('file'), (req,res)=>{
             hired: req.body.hired,
             picture_link: (req.file) ? req.file.location : req.body.picture_link
         }
-        , {where: {id: token.id}})
+        , {where: {id: req.body.userId}})
         .then(data =>{
             res.status(200).json(`successfully updated.`)
         })
         .catch(err=>{
-            res.status(500).send({msg: err})
+            res.status(500).send({Adminmsg: err})
         })
     } else {
         User.update({
@@ -116,7 +117,7 @@ router.put('/update', upload.single('file'), (req,res)=>{
             res.status(200).json(`successfully updated.`)
         })
         .catch(err=>{
-            res.status(500).send({msg: err})})
+            res.status(500).send({Usermsg: err})})
     };
 })
 
@@ -188,7 +189,7 @@ router.get('/getAll', validateSession, (req, res)=>{
 })
 
 //GET USER BY ID
-router.get('/getUser/:id', validateSession, (req, res)=>{
+router.get('/getUser/:id', (req, res)=>{
     User.findOne({where: {id: req.params.id}})
     .then(data =>{
         res.status(200).json(data)
