@@ -53,7 +53,7 @@ router.get('/alljobs', (req, res) => {
 
 router.get('/alluserjobs/user', (req, res) => {
     let token = jwt.decode(req.headers.authorization);
-    console.log(token)
+    // console.log(token)
     Jobs.findAll({
         where: {userId: token.id}
     })
@@ -76,7 +76,7 @@ router.get('/job/:id', (req, res) => {
 *****************/
 
 router.post('/create', validateSession, upload.single('file'), (req, res) => {
-    console.log(req.user.id)
+    // console.log(req.user.id)
     Jobs.create({
         job_title: req.body.job_title,
         company_name: req.body.company_name,
@@ -101,7 +101,7 @@ router.post('/create', validateSession, upload.single('file'), (req, res) => {
 *******************/
 
 router.put('/:id', validateSession, upload.single('file'), (req, res) => {
-    console.log(req.file, req.body,req.params.id)
+    // console.log(req.file, req.body,req.params.id)
     Jobs.update({
         job_title: req.body.job_title,
         company_name: req.body.company_name,
@@ -120,8 +120,7 @@ router.put('/:id', validateSession, upload.single('file'), (req, res) => {
 *******************/
 
 router.delete('/delete/:id', validateSession, function(req,res) {
-    var data = req.params.id;
-
+    let data = req.params.id;
     Jobs
         .destroy({
             where: { id: data }
