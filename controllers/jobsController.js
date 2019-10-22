@@ -119,7 +119,7 @@ router.put('/:id', validateSession, upload.single('file'), (req, res) => {
  *** Delete Jobs ***
 *******************/
 
-router.delete('/delete/:id', validateSession, function(req,res) {
+router.delete('/delete/:id', function(req,res) {
     let data = req.params.id;
     Jobs
         .destroy({
